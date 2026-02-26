@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="VoterManagementSystem.API/VoterManagementSystem.API.csproj" />
+  <Project Path="VoterManagementSystem.Application/VoterManagementSystem.Application.csproj" />
+  <Project Path="VoterManagementSystem.Core/VoterManagementSystem.Core.csproj" />
+  <Project Path="VoterManagementSystem.Infrastructure/VoterManagementSystem.Infrastructure.csproj" />
+</Solution>
