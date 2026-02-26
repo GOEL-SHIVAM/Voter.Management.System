@@ -1,0 +1,102 @@
+<div class="parties-management">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Party Management</mat-card-title>
+      <div class="spacer"></div>
+      <button mat-raised-button color="primary" (click)="onAdd()" *ngIf="!showForm">
+        <mat-icon>add</mat-icon>
+        Add Party
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Add Party Form -->
+      <div class="form-container" *ngIf="showForm">
+        <h3>Add New Political Party</h3>
+        <form [formGroup]="partyForm" (ngSubmit)="onSubmit()">
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Party Name</mat-label>
+              <input matInput formControlName="partyName" placeholder="Enter party name" />
+              <mat-icon matPrefix>account_balance</mat-icon>
+              <mat-error *ngIf="partyForm.get('partyName')?.hasError('required')">
+                Party name is required
+              </mat-error>
+              <mat-error *ngIf="partyForm.get('partyName')?.hasError('minlength')">
+                Party name must be at least 2 characters
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="password"
+                placeholder="Enter password"
+              />
+              <mat-icon matPrefix>lock</mat-icon>
+              <mat-error *ngIf="partyForm.get('password')?.hasError('required')">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="partyForm.get('password')?.hasError('minlength')">
+                Password must be at least 6 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button type="button" (click)="onCancel()">Cancel</button>
+            <button mat-raised-button color="primary" type="submit">Create Party</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Parties Table -->
+      <div class="table-container" *ngIf="!showForm">
+        <div *ngIf="isLoading" class="spinner-container">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <table mat-table [dataSource]="parties" *ngIf="!isLoading" class="full-width">
+          <ng-container matColumnDef="partyId">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let party">{{ party.partyId }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="partyName">
+            <th mat-header-cell *matHeaderCellDef>Party Name</th>
+            <td mat-cell *matCellDef="let party">
+              <div class="party-name">
+                <mat-icon>account_balance</mat-icon>
+                <span>{{ party.partyName }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let party">
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="onDelete(party)"
+                matTooltip="Delete Party"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div *ngIf="!isLoading && parties.length === 0" class="no-data">
+          <mat-icon>account_balance</mat-icon>
+          <p>No parties found. Add your first political party!</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

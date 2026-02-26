@@ -1,0 +1,133 @@
+<div class="voters-management">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Voter Management</mat-card-title>
+      <div class="spacer"></div>
+      <button mat-raised-button color="primary" (click)="onAdd()" *ngIf="!showForm">
+        <mat-icon>person_add</mat-icon>
+        Add Voter
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Add Voter Form -->
+      <div class="form-container" *ngIf="showForm">
+        <h3>Add New Voter</h3>
+        <form [formGroup]="voterForm" (ngSubmit)="onSubmit()">
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Aadhar Number</mat-label>
+              <input
+                matInput
+                formControlName="aadhar"
+                placeholder="12-digit Aadhar"
+                maxlength="12"
+              />
+              <mat-error *ngIf="voterForm.get('aadhar')?.hasError('required')">
+                Aadhar is required
+              </mat-error>
+              <mat-error *ngIf="voterForm.get('aadhar')?.hasError('pattern')">
+                Must be exactly 12 digits
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" placeholder="Full name" />
+              <mat-error *ngIf="voterForm.get('name')?.hasError('required')">
+                Name is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Birth Date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="birthDate"
+                [max]="maxDate"
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="voterForm.get('birthDate')?.hasError('required')">
+                Birth date is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="password"
+                placeholder="Minimum 6 characters"
+              />
+              <mat-error *ngIf="voterForm.get('password')?.hasError('required')">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="voterForm.get('password')?.hasError('minlength')">
+                Minimum 6 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button type="button" (click)="onCancel()">Cancel</button>
+            <button mat-raised-button color="primary" type="submit">Create Voter</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Voters Table -->
+      <div class="table-container" *ngIf="!showForm">
+        <div *ngIf="isLoading" class="spinner-container">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <table mat-table [dataSource]="voters" *ngIf="!isLoading" class="full-width">
+          <ng-container matColumnDef="voterId">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let voter">{{ voter.voterId }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="aadhar">
+            <th mat-header-cell *matHeaderCellDef>Aadhar</th>
+            <td mat-cell *matCellDef="let voter">{{ voter.aadhar }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let voter">{{ voter.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="birthDate">
+            <th mat-header-cell *matHeaderCellDef>Birth Date</th>
+            <td mat-cell *matCellDef="let voter">{{ voter.birthDate | date: 'mediumDate' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef>Age</th>
+            <td mat-cell *matCellDef="let voter">{{ voter.age }} years</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let voter">
+              <button mat-icon-button color="warn" (click)="onDelete(voter)" matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div *ngIf="!isLoading && voters.length === 0" class="no-data">
+          <mat-icon>people_outline</mat-icon>
+          <p>No voters found. Add your first voter!</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

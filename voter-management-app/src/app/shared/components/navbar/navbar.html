@@ -1,0 +1,32 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="navbar-content">
+    <div class="brand" [routerLink]="getHomeRoute()">
+      <mat-icon>how_to_vote</mat-icon>
+      <span class="title">Voter Management System</span>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="user-section">
+      <div class="user-info">
+        <span class="username">{{ currentUser?.username }}</span>
+        <span class="role-badge">{{ currentUser?.role }}</span>
+      </div>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="getHomeRoute()">
+          <mat-icon>home</mat-icon>
+          <span>Dashboard</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>

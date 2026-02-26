@@ -1,0 +1,81 @@
+.unauthorized-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px;
+}
+
+.unauthorized-card {
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.content {
+  text-align: center;
+  padding: 32px 24px;
+
+  .warning-icon {
+    font-size: 96px;
+    width: 96px;
+    height: 96px;
+    color: #f44336;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    margin: 0 0 16px 0;
+    font-size: 32px;
+    color: #333;
+  }
+
+  .message {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #666;
+  }
+
+  .sub-message {
+    margin: 0 0 32px 0;
+    font-size: 14px;
+    color: #999;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+
+    button {
+      min-width: 120px;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 24px 16px;
+
+    h1 {
+      font-size: 24px;
+    }
+
+    .message {
+      font-size: 16px;
+    }
+
+    .actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

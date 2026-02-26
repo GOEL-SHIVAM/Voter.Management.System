@@ -1,0 +1,109 @@
+<div class="results-container">
+  <div *ngIf="isLoading" class="spinner-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading election results...</p>
+  </div>
+
+  <div *ngIf="!isLoading && results" class="results-content">
+    <!-- Header -->
+    <mat-card class="header-card">
+      <mat-card-content>
+        <div class="header-content">
+          <mat-icon class="election-icon">how_to_vote</mat-icon>
+          <div class="election-info">
+            <h1>{{ results.electionCode }}</h1>
+            <p class="subtitle">Election Results</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat-item">
+            <mat-icon>people</mat-icon>
+            <div>
+              <span class="stat-value">{{ results.totalVotes }}</span>
+              <span class="stat-label">Total Votes</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <mat-icon>account_balance</mat-icon>
+            <div>
+              <span class="stat-value">{{ results.partyResults?.length || 0 }}</span>
+              <span class="stat-label">Participating Parties</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Winner Card -->
+    <mat-card class="winner-card" *ngIf="getWinnerParty() as winner">
+      <mat-card-content>
+        <div class="winner-header">
+          <mat-icon class="trophy-icon">emoji_events</mat-icon>
+          <h2>Winner</h2>
+        </div>
+        <div class="winner-details">
+          <h3>{{ winner.partyName }}</h3>
+          <div class="winner-stats">
+            <div class="vote-count">
+              <span class="votes">{{ winner.votes }}</span>
+              <span class="votes-label">votes</span>
+            </div>
+            <div class="percentage">
+              <span class="percent-value">{{ winner.percentage }}%</span>
+              <mat-progress-bar mode="determinate" [value]="winner.percentage" color="accent">
+              </mat-progress-bar>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Other Parties -->
+    <mat-card class="parties-card" *ngIf="getOtherParties().length > 0">
+      <mat-card-header>
+        <mat-card-title>Other Parties</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="party-result" *ngFor="let party of getOtherParties()">
+          <div class="party-info">
+            <mat-icon>account_balance</mat-icon>
+            <span class="party-name">{{ party.partyName }}</span>
+          </div>
+          <div class="party-stats">
+            <span class="votes-count">{{ party.votes }} votes</span>
+            <div class="progress-container">
+              <mat-progress-bar mode="determinate" [value]="party.percentage"> </mat-progress-bar>
+              <span class="percentage-text">{{ party.percentage }}%</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- No Results Message -->
+    <mat-card *ngIf="results && (!results.partyResults || results.partyResults.length === 0)">
+      <mat-card-content>
+        <div class="no-results">
+          <mat-icon>inbox</mat-icon>
+          <p>No results available yet. Voting may still be in progress.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !results" class="error-state">
+    <mat-card>
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon>error_outline</mat-icon>
+          <h2>Results Not Available</h2>
+          <p>
+            The election results for "{{ electionCode }}" could not be found or are not yet
+            available.
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

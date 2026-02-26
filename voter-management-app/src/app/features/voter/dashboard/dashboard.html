@@ -1,0 +1,46 @@
+<div class="voter-dashboard">
+  <mat-toolbar color="primary">
+    <span>Voter Dashboard</span>
+    <span class="spacer"></span>
+    <button mat-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </mat-toolbar>
+
+  <div class="dashboard-container">
+    <h1>Welcome, Voter!</h1>
+
+    <div class="cards-grid">
+      <mat-card class="dashboard-card" routerLink="/voter/cast-vote">
+        <mat-card-header>
+          <mat-icon class="card-icon">how_to_vote</mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>Cast Vote</h2>
+          <p>Vote in active elections</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="dashboard-card" routerLink="/voter/history">
+        <mat-card-header>
+          <mat-icon class="card-icon">history</mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>Voting History</h2>
+          <p>View your past votes</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="dashboard-card" routerLink="/voter/change-password">
+        <mat-card-header>
+          <mat-icon class="card-icon">lock</mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>Change Password</h2>
+          <p>Update your password</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

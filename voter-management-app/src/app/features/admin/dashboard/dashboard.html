@@ -1,0 +1,43 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <p class="welcome-text">Welcome, {{ currentUser?.username }}!</p>
+  </div>
+
+  <div class="cards-container">
+    <mat-card
+      *ngFor="let item of menuItems"
+      class="menu-card"
+      [style.border-left-color]="item.color"
+      (click)="navigate(item.route)"
+    >
+      <mat-card-content>
+        <div class="card-icon" [style.background-color]="item.color">
+          <mat-icon>{{ item.icon }}</mat-icon>
+        </div>
+        <div class="card-details">
+          <h2>{{ item.title }}</h2>
+          <p>{{ item.description }}</p>
+        </div>
+        <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="info-section">
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-icon>info</mat-icon>
+        <mat-card-title>Quick Actions</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <li>Register new voters and verify their details</li>
+          <li>Add political parties for upcoming elections</li>
+          <li>Create and manage election lifecycles</li>
+          <li *ngIf="isSuperAdmin">Manage admin accounts and permissions</li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

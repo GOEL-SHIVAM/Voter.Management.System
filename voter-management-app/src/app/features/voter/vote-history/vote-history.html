@@ -1,0 +1,103 @@
+<div class="vote-history-container">
+  <mat-card class="stats-card">
+    <mat-card-content>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <mat-icon>how_to_vote</mat-icon>
+          <div class="stat-details">
+            <span class="stat-value">{{ totalVotes }}</span>
+            <span class="stat-label">Total Votes Cast</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <mat-icon>event_available</mat-icon>
+          <div class="stat-details">
+            <span class="stat-value">{{ electionsParticipated }}</span>
+            <span class="stat-label">Elections Participated</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="history-card">
+    <mat-card-header>
+      <mat-icon class="header-icon">history</mat-icon>
+      <mat-card-title>Voting History</mat-card-title>
+      <mat-card-subtitle>Your complete voting record</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner></mat-spinner>
+        <p>Loading your voting history...</p>
+      </div>
+
+      <div class="table-container" *ngIf="!isLoading">
+        <table mat-table [dataSource]="voteHistory" class="full-width">
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let vote; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="electionCode">
+            <th mat-header-cell *matHeaderCellDef>Election</th>
+            <td mat-cell *matCellDef="let vote">
+              <div class="election-cell">
+                <mat-icon>how_to_vote</mat-icon>
+                <span>{{ vote.electionCode }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="partyName">
+            <th mat-header-cell *matHeaderCellDef>Your Choice</th>
+            <td mat-cell *matCellDef="let vote">
+              <mat-chip class="party-chip">
+                <mat-icon>account_balance</mat-icon>
+                {{ vote.partyName }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="votedAt">
+            <th mat-header-cell *matHeaderCellDef>Date & Time</th>
+            <td mat-cell *matCellDef="let vote">
+              <div class="date-cell">
+                <span class="date">{{ vote.votedAt | date: 'mediumDate' }}</span>
+                <span class="time">{{ vote.votedAt | date: 'shortTime' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let vote">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="viewResults(vote.electionCode)"
+                matTooltip="View Results"
+              >
+                <mat-icon>bar_chart</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div *ngIf="!isLoading && voteHistory.length === 0" class="no-data">
+          <mat-icon>inbox</mat-icon>
+          <h3>No Voting History</h3>
+          <p>You haven't cast any votes yet.</p>
+          <button mat-raised-button color="primary" routerLink="/voter/cast-vote">
+            <mat-icon>how_to_vote</mat-icon>
+            Cast Your First Vote
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

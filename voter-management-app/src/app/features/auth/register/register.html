@@ -1,0 +1,114 @@
+<div class="register-container">
+  <mat-card class="register-card">
+    <mat-card-header>
+      <div class="header-content">
+        <mat-icon class="register-icon">person_add</mat-icon>
+        <mat-card-title>Voter Registration</mat-card-title>
+        <mat-card-subtitle>Register to participate in elections</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Aadhar Number -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Aadhar Number</mat-label>
+          <input
+            matInput
+            formControlName="aadhar"
+            placeholder="Enter 12-digit Aadhar number"
+            maxlength="12"
+            autocomplete="off"
+          />
+          <mat-icon matPrefix>credit_card</mat-icon>
+          <mat-hint>Must be exactly 12 digits</mat-hint>
+          <mat-error *ngIf="aadhar?.hasError('required')"> Aadhar number is required </mat-error>
+          <mat-error *ngIf="aadhar?.hasError('pattern')">
+            Aadhar must be exactly 12 digits
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="Enter your full name"
+            autocomplete="name"
+          />
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="name?.hasError('required')"> Name is required </mat-error>
+          <mat-error *ngIf="name?.hasError('minlength')">
+            Name must be at least 2 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Birth Date -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Date of Birth</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="birthDate"
+            [max]="maxDate"
+            placeholder="Select your birth date"
+          />
+          <mat-icon matPrefix>calendar_today</mat-icon>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-hint>You must be 18 or older</mat-hint>
+          <mat-error *ngIf="birthDate?.hasError('required')"> Birth date is required </mat-error>
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Create a strong password"
+            autocomplete="new-password"
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Hide password'"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>Minimum 6 characters</mat-hint>
+          <mat-error *ngIf="password?.hasError('required')"> Password is required </mat-error>
+          <mat-error *ngIf="password?.hasError('minlength')">
+            Password must be at least 6 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Register Button -->
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="full-width register-button"
+          [disabled]="isLoading"
+        >
+          <mat-icon *ngIf="!isLoading">person_add</mat-icon>
+          <span *ngIf="!isLoading">Register</span>
+          <span *ngIf="isLoading">Registering...</span>
+        </button>
+      </form>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        <p>
+          Already have an account?
+          <a routerLink="/login" mat-button color="primary">Login here</a>
+        </p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

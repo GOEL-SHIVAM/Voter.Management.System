@@ -1,0 +1,124 @@
+<div class="cast-vote-container">
+  <mat-card class="vote-card">
+    <mat-card-header>
+      <div class="header-content">
+        <mat-icon class="vote-icon">how_to_vote</mat-icon>
+        <div>
+          <mat-card-title>Cast Your Vote</mat-card-title>
+          <mat-card-subtitle>Participate in active elections</mat-card-subtitle>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner></mat-spinner>
+        <p>Loading elections...</p>
+      </div>
+
+      <div *ngIf="!isLoading && startedElections.length === 0" class="no-elections">
+        <mat-icon>inbox</mat-icon>
+        <h3>No Active Elections</h3>
+        <p>There are currently no elections available for voting.</p>
+        <p class="hint">Please check back later or contact your administrator.</p>
+      </div>
+
+      <form
+        [formGroup]="voteForm"
+        (ngSubmit)="onSubmit()"
+        *ngIf="!isLoading && startedElections.length > 0"
+      >
+        <!-- Election Selection -->
+        <div class="form-section">
+          <h3>Step 1: Select Election</h3>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Choose Election</mat-label>
+            <mat-select formControlName="electionCode">
+              <mat-option *ngFor="let election of startedElections" [value]="election.electionCode">
+                {{ election.electionCode }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>how_to_vote</mat-icon>
+            <mat-error *ngIf="voteForm.get('electionCode')?.hasError('required')">
+              Please select an election
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Party Selection -->
+        <div class="form-section" *ngIf="voteForm.get('electionCode')?.value">
+          <h3>Step 2: Select Party</h3>
+
+          <div *ngIf="selectedElectionParties.length === 0" class="loading-parties">
+            <mat-spinner diameter="24"></mat-spinner>
+            <span>Loading parties...</span>
+          </div>
+
+          <mat-radio-group
+            formControlName="partyName"
+            class="party-radio-group"
+            *ngIf="selectedElectionParties.length > 0"
+          >
+            <mat-radio-button
+              *ngFor="let party of selectedElectionParties"
+              [value]="party"
+              class="party-option"
+            >
+              <div class="party-card">
+                <mat-icon>account_balance</mat-icon>
+                <span>{{ party }}</span>
+              </div>
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <mat-error
+            *ngIf="
+              voteForm.get('partyName')?.hasError('required') && voteForm.get('partyName')?.touched
+            "
+            class="error-message"
+          >
+            Please select a party
+          </mat-error>
+        </div>
+
+        <!-- Vote Confirmation -->
+        <div class="confirmation-section" *ngIf="voteForm.get('partyName')?.value">
+          <mat-card class="confirmation-card">
+            <mat-card-content>
+              <h4>Confirm Your Vote</h4>
+              <div class="vote-summary">
+                <div class="summary-item">
+                  <span class="label">Election:</span>
+                  <span class="value">{{ voteForm.get('electionCode')?.value }}</span>
+                </div>
+                <div class="summary-item">
+                  <span class="label">Your Choice:</span>
+                  <span class="value highlight">{{ voteForm.get('partyName')?.value }}</span>
+                </div>
+              </div>
+              <p class="warning">
+                <mat-icon>warning</mat-icon>
+                Once submitted, your vote cannot be changed!
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="voteForm.invalid || isSubmitting"
+            class="submit-button"
+          >
+            <mat-icon *ngIf="!isSubmitting">check_circle</mat-icon>
+            <span *ngIf="!isSubmitting">Cast Vote</span>
+            <span *ngIf="isSubmitting">Submitting...</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
